@@ -13,6 +13,7 @@
     "@std/jsonc": "jsr:@std/jsonc@^1.0.2",
     "@std/media-types": "jsr:@std/media-types@^1.1.0",
     "@std/msgpack": "jsr:@std/msgpack@^1.0.3",
+    "@std/path": "jsr:@std/path@^1.1.2",
     "@std/toml": "jsr:@std/toml@^1.0.9",
     "@std/yaml": "jsr:@std/yaml@^1.0.9",
     "json5": "npm:json5@^2.2.3",
