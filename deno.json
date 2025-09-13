@@ -1,0 +1,23 @@
+{
+  "lock": true,
+  "unstable": [
+    "kv"
+  ],
+  "tasks": {
+    "start": "deno run -A --watch --env-file dev.ts"
+  },
+  "imports": {
+    "@deaf/fcrdns": "jsr:@deaf/fcrdns@^0.1.0",
+    "@std/cbor": "jsr:@std/cbor@^0.1.8",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.5",
+    "@std/http": "jsr:@std/http@^1.0.20",
+    "@std/jsonc": "jsr:@std/jsonc@^1.0.2",
+    "@std/media-types": "jsr:@std/media-types@^1.1.0",
+    "@std/msgpack": "jsr:@std/msgpack@^1.0.3",
+    "@std/path": "jsr:@std/path@^1.1.2",
+    "@std/toml": "jsr:@std/toml@^1.0.9",
+    "@std/yaml": "jsr:@std/yaml@^1.0.9",
+    "json5": "npm:json5@^2.2.3",
+    "zod": "npm:zod@^4.0.17"
+  }
+}
