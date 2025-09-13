@@ -2,8 +2,15 @@ import { lookup } from "@deaf/fcrdns";
 
 const trustedHostnames = new Set([
   "jmsn.foo.",
-  "localhost",
+  "localhost.",
 ]);
+
+function normalizeHostname(hostname: string): string {
+  if (!hostname[hostname.length - 1].endsWith(".")) {
+    return hostname + ".";
+  }
+  return hostname;
+}
 
 function baseHostname(hostname: string): string | undefined {
   // strip the first subdomain
@@ -26,7 +33,8 @@ export async function authenticateRequest(
   const trusted = new Set<string>();
 
   for (const hostname of resolvedHostnames) {
-    let host: string | undefined = hostname;
+    let host: string | undefined = normalizeHostname(hostname);
+
     while (host !== undefined) {
       if (trustedHostnames.has(host)) {
         trusted.add(hostname);
