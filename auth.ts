@@ -55,10 +55,20 @@ export async function authenticateRequest(
 
   for (const hostname of resolvedHostnames) {
     let host: string | undefined = normalizeHostname(hostname);
+    let dot = false;
 
     while (host !== undefined) {
+      if (host === ".") {
+        dot = true;
+      }
+
       if (trustedHostnames.has(host)) {
         trusted.add(hostname);
+        break;
+      }
+
+      if (dot) {
+        // We have already seen a dot, so we can stop here.
         break;
       }
 
