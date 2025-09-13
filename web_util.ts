@@ -170,6 +170,12 @@ export function buildMethodsHandler(handlers: Route): Handler {
         break;
       case "OPTIONS":
         if (OPTIONS) return OPTIONS(ctx, request, params, info);
+        return new Response(null, {
+          status: 204,
+          headers: methodNotAllowedHeaders,
+        });
+      default:
+        // Method not allowed
         break;
     }
 
