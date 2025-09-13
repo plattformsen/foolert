@@ -16,6 +16,20 @@ import json5 from "json5";
 import { parseMediaType } from "@std/media-types";
 import { accepts } from "@std/http";
 
+const DEFAULT_MAX_RECEIVE_CONTENT_LENGTH = 1 * 1024 * 1024; // 1 MiB
+
+const MAX_RECEIVE_CONTENT_LENGTH_ENV = parseInt(
+  Deno.env.get("MAX_CONTENT_LENGTH") || "0",
+  10,
+);
+
+export const MAX_RECEIVE_CONTENT_LENGTH =
+  typeof MAX_RECEIVE_CONTENT_LENGTH_ENV === "number" &&
+    Number.isSafeInteger(MAX_RECEIVE_CONTENT_LENGTH_ENV) &&
+    MAX_RECEIVE_CONTENT_LENGTH_ENV > 0
+    ? MAX_RECEIVE_CONTENT_LENGTH_ENV
+    : DEFAULT_MAX_RECEIVE_CONTENT_LENGTH;
+
 type Awaitable<T> = T | Promise<T>;
 
 export type MethodLowercase =
@@ -271,6 +285,16 @@ function streamOfRequestBody(
     ) {
       console.debug("debug: request has no body");
       return undefined;
+    }
+    if (contentLength > MAX_RECEIVE_CONTENT_LENGTH) {
+      throw new ResponseError(
+        send(
+          request,
+          { error: "content-length too large" },
+          { status: 413 },
+        ),
+        "content-length too large",
+      );
     }
     return readAtMostNBytes(request.body, contentLength);
   }
