@@ -1,4 +1,5 @@
 {
+  "lock": true,
   "unstable": [
     "kv"
   ],
