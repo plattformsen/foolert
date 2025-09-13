@@ -7,7 +7,7 @@ export function addShutdownListener(listener: () => Promise<void> | void) {
 let exiting = false;
 
 export async function exit(exitCode: number): Promise<never> {
-  if (!exiting) undefined as never;
+  if (exiting) return undefined as never;
   exiting = true;
 
   for (const listener of listeners) {
