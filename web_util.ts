@@ -203,6 +203,7 @@ class ReadNBytesSource {
       } else {
         controller.enqueue(value.subarray(0, this.#remaining));
         this.#remaining = 0;
+        this.#reader.releaseLock();
         this.#reader = undefined;
       }
     }
