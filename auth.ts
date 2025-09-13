@@ -13,7 +13,7 @@ const trustedHostnames = new Set([
  * @returns The normalized hostname
  */
 function normalizeHostname(hostname: string): string {
-  if (!hostname[hostname.length - 1].endsWith(".")) {
+  if (hostname[hostname.length - 1] !== ".") {
     return hostname + ".";
   }
   return hostname;
