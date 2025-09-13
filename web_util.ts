@@ -513,7 +513,7 @@ export function encodeJson(data: unknown): string {
 }
 
 export function encodeMsgpack(data: MsgpackType): Uint8Array {
-  return new Uint8Array(bytifyMsgpack(data));
+  return bytifyMsgpack(data);
 }
 
 export function encodeToml(data: Record<string, unknown>): string {
