@@ -119,6 +119,19 @@ export function buildMethodsHandler(handlers: Route): Handler {
   const HEAD = handlers.HEAD || handlers.head;
   const OPTIONS = handlers.OPTIONS || handlers.options;
 
+  const allowedMethods = [
+    GET && "GET",
+    POST && "POST",
+    PUT && "PUT",
+    DELETE && "DELETE",
+    PATCH && "PATCH",
+    HEAD && "HEAD",
+    OPTIONS && "OPTIONS",
+  ].filter((m): m is Method => typeof m === "string").join(", ");
+
+  const methodNotAllowedHeaders = new Headers();
+  methodNotAllowedHeaders.set("Allow", allowedMethods);
+
   return (ctx, request, params, info) => {
     const method = request.method as Method;
 
@@ -146,7 +159,10 @@ export function buildMethodsHandler(handlers: Route): Handler {
         break;
     }
 
-    return Response.json({ error: "method not allowed" }, { status: 405 });
+    return Response.json({ error: "method not allowed" }, {
+      status: 405,
+      headers: methodNotAllowedHeaders,
+    });
   };
 }
 
