@@ -525,7 +525,7 @@ export function encodeYaml(data: unknown): string {
 }
 
 export function encodeCbor(data: CborType): Uint8Array {
-  return new Uint8Array(bytifyCbor(data));
+  return bytifyCbor(data);
 }
 
 export function encodeJson5(data: unknown): string {
