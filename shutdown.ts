@@ -24,15 +24,16 @@ export async function exit(exitCode: number): Promise<never> {
     }
   }
 
+  if (Deno.stdin.isTerminal()) {
+    Deno.stdin.setRaw(false);
+  }
+
   Deno.exit(exitCode);
 }
 
 function exit0() {
   if (exiting) return;
   console.debug("debug: exiting on signal");
-  if (Deno.stdin.isTerminal()) {
-    Deno.stdin.setRaw(false);
-  }
   Deno.removeSignalListener("SIGINT", exit0);
   Deno.removeSignalListener("SIGTERM", exit0);
   exit(0);
