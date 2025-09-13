@@ -398,7 +398,9 @@ async function decodeJson5(
 
 decoders.set("application/json", decodeJson);
 decoders.set("application/jsonc", decodeJsonc);
+decoders.set("application/x-jsonc", decodeJsonc);
 decoders.set("application/msgpack", decodeMsgpack);
+decoders.set("application/x-msgpack", decodeMsgpack);
 decoders.set("application/toml", decodeToml);
 decoders.set("application/x-toml", decodeToml);
 decoders.set("application/yaml", decodeYaml);
