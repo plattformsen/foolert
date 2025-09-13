@@ -9,7 +9,7 @@ export async function exit(exitCode: number): Promise<never> {
     try {
       await listener();
     } catch (e) {
-      console.error("error: shutdown listener failed, %s", e);
+      console.error("error: shutdown listener %s failed, %s", listener.name, e);
     }
   }
   Deno.exit(exitCode);
