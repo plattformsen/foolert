@@ -5,6 +5,13 @@ const trustedHostnames = new Set([
   "localhost.",
 ]);
 
+/**
+ * Normalizes a hostname by ensuring it ends with a trailing
+ * dot.
+ *
+ * @param hostname The hostname to normalize
+ * @returns The normalized hostname
+ */
 function normalizeHostname(hostname: string): string {
   if (!hostname[hostname.length - 1].endsWith(".")) {
     return hostname + ".";
