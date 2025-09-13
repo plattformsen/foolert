@@ -16,6 +16,8 @@ export async function exit(exitCode: number): Promise<never> {
 }
 
 function exit0() {
+  console.debug("debug: exiting on signal");
+  Deno.stdin.setRaw(false);
   Deno.removeSignalListener("SIGINT", exit0);
   Deno.removeSignalListener("SIGTERM", exit0);
   exit(0);
@@ -24,4 +26,5 @@ function exit0() {
 export function exitOnSignals() {
   Deno.addSignalListener("SIGINT", exit0);
   Deno.addSignalListener("SIGTERM", exit0);
+  Deno.stdin.setRaw(true, { cbreak: true });
 }
