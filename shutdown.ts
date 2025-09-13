@@ -4,11 +4,17 @@ export function addShutdownListener(listener: () => Promise<void> | void) {
   listeners.unshift(listener);
 }
 
-let exiting = false;
+let exiting: PromiseLike<never> | undefined = undefined;
 
 export async function exit(exitCode: number): Promise<never> {
-  if (exiting) return undefined as never;
-  exiting = true;
+  if (exiting) return await exiting;
+
+  const deferred = Promise.withResolvers<never>();
+  exiting = deferred.promise;
+  // we never call resolve on this, because we want to exit
+  // the process after all listeners have been called, this
+  // is simply just a way to halt execution for those that
+  // await exit()
 
   for (const listener of listeners) {
     try {
