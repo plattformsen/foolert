@@ -294,100 +294,64 @@ const decoders = new Map<
 >();
 const textDecoder = new TextDecoder();
 
+async function readBytes(
+  stream: ReadableStream<Uint8Array>,
+): Promise<Uint8Array> {
+  const chunks: Uint8Array[] = [];
+  let totalLength = 0;
+  for await (const chunk of stream) {
+    chunks.push(chunk);
+    totalLength += chunk.length;
+  }
+  const result = new Uint8Array(totalLength);
+  let offset = 0;
+  for (const chunk of chunks) {
+    result.set(chunk, offset);
+    offset += chunk.length;
+  }
+  return result;
+}
+
 async function decodeJson(
   stream: ReadableStream<Uint8Array>,
 ): Promise<unknown> {
-  let bytes: Uint8Array = new Uint8Array(0);
-  for await (const chunk of stream) {
-    const newBytes = new Uint8Array(bytes.length + chunk.length);
-    newBytes.set(bytes);
-    newBytes.set(chunk, bytes.length);
-    bytes = newBytes;
-  }
-  const text = textDecoder.decode(bytes);
-  return JSON.parse(text);
+  return JSON.parse(textDecoder.decode(await readBytes(stream)));
 }
 
 async function decodeJsonc(
   stream: ReadableStream<Uint8Array>,
 ): Promise<unknown> {
-  let bytes: Uint8Array = new Uint8Array(0);
-  for await (const chunk of stream) {
-    const newBytes = new Uint8Array(bytes.length + chunk.length);
-    newBytes.set(bytes);
-    newBytes.set(chunk, bytes.length);
-    bytes = newBytes;
-  }
-  const text = textDecoder.decode(bytes);
-  return parseJsonc(text);
+  return parseJsonc(textDecoder.decode(await readBytes(stream)));
 }
 
 async function decodeMsgpack(
   stream: ReadableStream<Uint8Array>,
 ): Promise<unknown> {
-  let bytes: Uint8Array = new Uint8Array(0);
-  for await (const chunk of stream) {
-    const newBytes = new Uint8Array(bytes.length + chunk.length);
-    newBytes.set(bytes);
-    newBytes.set(chunk, bytes.length);
-    bytes = newBytes;
-  }
-  return parseMsgpack(bytes);
+  return parseMsgpack(await readBytes(stream));
 }
 
 async function decodeToml(
   stream: ReadableStream<Uint8Array>,
 ): Promise<unknown> {
-  let bytes: Uint8Array = new Uint8Array(0);
-  for await (const chunk of stream) {
-    const newBytes = new Uint8Array(bytes.length + chunk.length);
-    newBytes.set(bytes);
-    newBytes.set(chunk, bytes.length);
-    bytes = newBytes;
-  }
-  const text = textDecoder.decode(bytes);
-  return parseToml(text);
+  return parseToml(textDecoder.decode(await readBytes(stream)));
 }
 
 async function decodeYaml(
   stream: ReadableStream<Uint8Array>,
 ): Promise<unknown> {
-  let bytes: Uint8Array = new Uint8Array(0);
-  for await (const chunk of stream) {
-    const newBytes = new Uint8Array(bytes.length + chunk.length);
-    newBytes.set(bytes);
-    newBytes.set(chunk, bytes.length);
-    bytes = newBytes;
-  }
-  const text = textDecoder.decode(bytes);
-  return parseYaml(text);
+  return parseYaml(textDecoder.decode(await readBytes(stream)));
 }
 
 async function decodeCbor(
   stream: ReadableStream<Uint8Array>,
 ): Promise<unknown> {
-  let bytes: Uint8Array = new Uint8Array(0);
-  for await (const chunk of stream) {
-    const newBytes = new Uint8Array(bytes.length + chunk.length);
-    newBytes.set(bytes);
-    newBytes.set(chunk, bytes.length);
-    bytes = newBytes;
-  }
-  return parseCbor(bytes);
+  return parseCbor(await readBytes(stream));
 }
 
 async function decodeJson5(
   stream: ReadableStream<Uint8Array>,
 ): Promise<unknown> {
-  let bytes: Uint8Array = new Uint8Array(0);
-  for await (const chunk of stream) {
-    const newBytes = new Uint8Array(bytes.length + chunk.length);
-    newBytes.set(bytes);
-    newBytes.set(chunk, bytes.length);
-    bytes = newBytes;
-  }
-  const text = textDecoder.decode(bytes);
-  return json5.parse(text);
+  return json5.parse(textDecoder.decode(await readBytes(stream)));
 }
 
 decoders.set("application/json", decodeJson);
