@@ -1,3 +1,5 @@
+import { addShutdownListener } from "./shutdown.ts";
+
 let kv: Deno.Kv | undefined;
 
 export function setKv(db: Deno.Kv) {
@@ -20,3 +22,7 @@ export function closeKv() {
     kv = undefined;
   }
 }
+
+addShutdownListener(() => {
+  closeKv();
+});

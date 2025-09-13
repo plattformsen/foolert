@@ -1,25 +1,14 @@
 import { app } from "./app.ts";
-import { closeKv } from "./kv.ts";
+import { addShutdownListener, exitOnSignals } from "./shutdown.ts";
 
-const ac = new AbortController();
-
-Deno.addSignalListener("SIGINT", () => {
-  console.debug("debug: caught SIGINT, shutting down...");
-  ac.abort();
-});
-
-Deno.addSignalListener("SIGTERM", () => {
-  console.debug("debug: caught SIGTERM, shutting down...");
-  ac.abort();
-});
-
-ac.signal.addEventListener("abort", closeKv);
+exitOnSignals();
 
 const server = Deno.serve({
   onListen: ({ hostname, port }) => {
     console.debug(`debug: listening on http://${hostname}:${port}`);
   },
-  signal: ac.signal,
 }, app);
+
+addShutdownListener(async () => await server.shutdown());
 
 await server.finished;
