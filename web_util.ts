@@ -179,7 +179,7 @@ export function buildMethodsHandler(handlers: Route): Handler {
         break;
     }
 
-    return Response.json({ error: "method not allowed" }, {
+    return send(request, { error: "method not allowed" }, {
       status: 405,
       headers: methodNotAllowedHeaders,
     });
@@ -418,7 +418,7 @@ export async function receive<Schema extends ZodType>(
 
   if (!body) {
     throw new ResponseError(
-      Response.json({ error: "missing body" }, { status: 400 }),
+      send(request, { error: "missing body" }, { status: 400 }),
       "missing body",
     );
   }
@@ -431,14 +431,15 @@ export async function receive<Schema extends ZodType>(
 
   if (!contentType) {
     throw new ResponseError(
-      Response.json({ error: "missing content-type" }, { status: 400 }),
+      send(request, { error: "missing content-type" }, { status: 400 }),
       "missing content-type",
     );
   }
 
   if (charset !== undefined && charset.toLowerCase() !== "utf-8") {
     throw new ResponseError(
-      Response.json(
+      send(
+        request,
         { error: `unsupported charset: ${charset}` },
         { status: 415 },
       ),
@@ -450,7 +451,8 @@ export async function receive<Schema extends ZodType>(
 
   if (!decoder) {
     throw new ResponseError(
-      Response.json(
+      send(
+        request,
         { error: `unsupported content-type: ${contentType}` },
         { status: 415 },
       ),
@@ -473,7 +475,8 @@ export async function receive<Schema extends ZodType>(
       result.error.issues,
     );
     throw new ResponseError(
-      Response.json(
+      send(
+        request,
         { error: "invalid request payload", details: result.error.issues },
         { status: 400 },
       ),
@@ -536,7 +539,8 @@ export function assertAcceptsSupported(
   const contentType = accepts(request, ...Array.from(encoders.keys()));
   if (!contentType) {
     throw new ResponseError(
-      Response.json(
+      send(
+        request,
         { error: "no acceptable content-type found" },
         { status: 406 },
       ),
@@ -559,7 +563,8 @@ export function send(
 
   if (!contentType) {
     throw new ResponseError(
-      Response.json(
+      send(
+        request,
         { error: "no acceptable content-type found" },
         { status: 406 },
       ),
@@ -637,5 +642,5 @@ async function router(
     }
   }
 
-  return Response.json({ error: "not found" }, { status: 404 });
+  return send(request, { error: "not found" }, { status: 404 });
 }
