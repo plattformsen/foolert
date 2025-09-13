@@ -9,6 +9,7 @@ const server = Deno.serve({
   },
 }, app);
 
-addShutdownListener(async () => await server.shutdown());
-
-await server.finished;
+addShutdownListener(async () => {
+  await server.shutdown();
+  await server.finished;
+});
