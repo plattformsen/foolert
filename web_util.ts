@@ -265,7 +265,10 @@ function streamOfRequestBody(
 
   if (request.headers.has("content-length")) {
     const contentLength = parseInt(request.headers.get("content-length")!, 10);
-    if (Number.isNaN(contentLength) || !Number.isSafeInteger(contentLength)) {
+    if (
+      Number.isNaN(contentLength) || !Number.isSafeInteger(contentLength) ||
+      contentLength < 0
+    ) {
       console.debug("debug: request has no body");
       return undefined;
     }
