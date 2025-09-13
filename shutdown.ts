@@ -1,7 +1,7 @@
 const listeners: Array<() => Promise<void> | void> = [];
 
 export function addShutdownListener(listener: () => Promise<void> | void) {
-  listeners.push(listener);
+  listeners.unshift(listener);
 }
 
 let exiting = false;
