@@ -261,9 +261,21 @@ class ReadNBytesSource {
       } else {
         controller.enqueue(value.subarray(0, this.#remaining));
         this.#remaining = 0;
+      }
+    }
+
+    if (this.#remaining <= 0) {
+      controller.close();
+      if (this.#reader) {
+        try {
+          await this.#reader.cancel();
+        } catch {
+          // no-op
+        }
         this.#reader.releaseLock();
         this.#reader = undefined;
       }
+      return;
     }
   }
 }
