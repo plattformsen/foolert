@@ -460,7 +460,20 @@ export async function receive<Schema extends ZodType>(
     );
   }
 
-  const parsedData = await decoder(body);
+  let parsedData: unknown;
+
+  try {
+    parsedData = await decoder(body);
+  } catch {
+    throw new ResponseError(
+      send(
+        request,
+        { error: "failed to parse request payload" },
+        { status: 400 },
+      ),
+      "failed to parse request payload",
+    );
+  }
 
   if (!schema) {
     return parsedData as z.infer<Schema>;
