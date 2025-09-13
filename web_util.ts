@@ -18,8 +18,22 @@ import { accepts } from "@std/http";
 
 type Awaitable<T> = T | Promise<T>;
 
-export type MethodLowercase = "get" | "post" | "put" | "delete" | "patch";
-export type Method = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+export type MethodLowercase =
+  | "get"
+  | "post"
+  | "put"
+  | "delete"
+  | "patch"
+  | "head"
+  | "options";
+export type Method =
+  | "GET"
+  | "POST"
+  | "PUT"
+  | "DELETE"
+  | "PATCH"
+  | "HEAD"
+  | "OPTIONS";
 
 export type ParamsBase = {
   [key in string]?: string;
@@ -102,6 +116,8 @@ export function buildMethodsHandler(handlers: Route): Handler {
   const PUT = handlers.PUT || handlers.put;
   const DELETE = handlers.DELETE || handlers.delete;
   const PATCH = handlers.PATCH || handlers.patch;
+  const HEAD = handlers.HEAD || handlers.head;
+  const OPTIONS = handlers.OPTIONS || handlers.options;
 
   return (ctx, request, params, info) => {
     const method = request.method as Method;
@@ -121,6 +137,12 @@ export function buildMethodsHandler(handlers: Route): Handler {
         break;
       case "PATCH":
         if (PATCH) return PATCH(ctx, request, params, info);
+        break;
+      case "HEAD":
+        if (HEAD) return HEAD(ctx, request, params, info);
+        break;
+      case "OPTIONS":
+        if (OPTIONS) return OPTIONS(ctx, request, params, info);
         break;
     }
 
