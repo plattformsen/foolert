@@ -589,6 +589,7 @@ export function send(
 
   const headers = new Headers(responseInit?.headers);
   headers.set("Content-Type", contentType);
+  headers.set("Vary", "Accept");
 
   return new Response(encoder(data), {
     status: responseInit?.status ?? 200,
