@@ -13,3 +13,10 @@ export async function getKv(): Promise<Deno.Kv> {
   }
   return kv;
 }
+
+export function closeKv() {
+  if (kv) {
+    kv.close();
+    kv = undefined;
+  }
+}
