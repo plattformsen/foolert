@@ -4,7 +4,7 @@
     "kv"
   ],
   "tasks": {
-    "start": "deno run -A --watch --unstable-kv dev.ts"
+    "start": "deno run -A --watch --env-file dev.ts"
   },
   "imports": {
     "@deaf/fcrdns": "jsr:@deaf/fcrdns@^0.1.0",
